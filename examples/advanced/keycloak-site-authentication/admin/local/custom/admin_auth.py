@@ -44,7 +44,7 @@ class AdminAuth(EventHandler):
                 "password": self.passwords[org_name],
                 "grant_type": "password",
             }
-            response = requests.post(endpoint, data=payload)
+            response = requests.post(endpoint, data=payload, timeout=60)
             token = json.loads(response.text).get("access_token")
         except:
             token = None
