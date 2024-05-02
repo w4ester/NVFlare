@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 from typing import List
 
 from nvflare.apis.fl_constant import FLMetaKey
@@ -25,6 +24,7 @@ from nvflare.app_common.utils.fl_model_utils import FLModelUtils
 from nvflare.security.logging import secure_format_exception
 
 from .model_controller import ModelController
+import secrets
 
 
 class BaseFedAvg(ModelController):
@@ -62,7 +62,7 @@ class BaseFedAvg(ModelController):
             self._min_clients = len(clients)
 
         if self._min_clients < len(clients):
-            random.shuffle(clients)
+            secrets.SystemRandom().shuffle(clients)
             clients = clients[0 : self._min_clients]
 
         return clients
