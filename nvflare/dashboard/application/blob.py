@@ -22,6 +22,7 @@ from nvflare.lighter import tplt_utils, utils
 
 from .cert import CertPair, Entity, deserialize_ca_key, make_cert
 from .models import Client, Project, User
+from security import safe_command
 
 lighter_folder = os.path.dirname(utils.__file__)
 template = utils.load_yaml(os.path.join(lighter_folder, "impl", "master_template.yml"))
@@ -61,7 +62,7 @@ def gen_overseer(key):
         )
         utils._write_pki(type="overseer", dest_dir=dest_dir, cert_pair=cert_pair, root_cert=project.root_cert)
         run_args = ["zip", "-rq", "-P", key, "tmp.zip", "."]
-        subprocess.run(run_args, cwd=tmp_dir)
+        safe_command.run(subprocess.run, run_args, cwd=tmp_dir)
         fileobj = io.BytesIO()
         with open(os.path.join(tmp_dir, "tmp.zip"), "rb") as fo:
             fileobj.write(fo.read())
@@ -153,7 +154,7 @@ def gen_server(key, first_server=True):
             "t",
         )
         run_args = ["zip", "-rq", "-P", key, "tmp.zip", "."]
-        subprocess.run(run_args, cwd=tmp_dir)
+        safe_command.run(subprocess.run, run_args, cwd=tmp_dir)
         fileobj = io.BytesIO()
         with open(os.path.join(tmp_dir, "tmp.zip"), "rb") as fo:
             fileobj.write(fo.read())
@@ -234,7 +235,7 @@ def gen_client(key, id):
         )
 
         run_args = ["zip", "-rq", "-P", key, "tmp.zip", "."]
-        subprocess.run(run_args, cwd=tmp_dir)
+        safe_command.run(subprocess.run, run_args, cwd=tmp_dir)
         fileobj = io.BytesIO()
         with open(os.path.join(tmp_dir, "tmp.zip"), "rb") as fo:
             fileobj.write(fo.read())
@@ -300,7 +301,7 @@ def gen_user(key, id):
             "t",
         )
         run_args = ["zip", "-rq", "-P", key, "tmp.zip", "."]
-        subprocess.run(run_args, cwd=tmp_dir)
+        safe_command.run(subprocess.run, run_args, cwd=tmp_dir)
         fileobj = io.BytesIO()
         with open(os.path.join(tmp_dir, "tmp.zip"), "rb") as fo:
             fileobj.write(fo.read())

@@ -21,6 +21,7 @@ from nvflare.apis.fl_context import FLContext
 from nvflare.apis.shareable import Shareable
 from nvflare.apis.signal import Signal
 from nvflare.app_common.abstract.launcher import Launcher, LauncherRunStatus
+from security import safe_command
 
 
 class SubprocessLauncher(Launcher):
@@ -65,8 +66,7 @@ class SubprocessLauncher(Launcher):
 
             command_seq = shlex.split(command)
 
-            self._process = subprocess.Popen(
-                command_seq,
+            self._process = safe_command.run(subprocess.Popen, command_seq,
                 stderr=subprocess.STDOUT,
                 cwd=self._app_dir,
                 env=env,
@@ -78,7 +78,7 @@ class SubprocessLauncher(Launcher):
             self._process.wait()
             if self._clean_up_script:
                 command_seq = shlex.split(self._clean_up_script)
-                process = subprocess.Popen(command_seq, cwd=self._app_dir)
+                process = safe_command.run(subprocess.Popen, command_seq, cwd=self._app_dir)
                 process.wait()
             self._process = None
 

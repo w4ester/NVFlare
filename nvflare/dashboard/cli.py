@@ -22,6 +22,7 @@ import docker
 import nvflare
 from nvflare.apis.utils.format_check import name_check
 from nvflare.lighter import tplt_utils, utils
+from security import safe_command
 
 supported_csp = ("azure", "aws")
 
@@ -116,7 +117,7 @@ def start_local(env):
     wsgi_location = os.path.join(file_dir_path, "wsgi.py")
     cmd = [sys.executable, wsgi_location]
     env.update({"NVFL_WEB_ROOT": os.path.dirname(os.path.abspath(__file__))})
-    process_status = subprocess.run(args=cmd, env=env)
+    process_status = safe_command.run(subprocess.run, args=cmd, env=env)
     return process_status
 
 
@@ -152,7 +153,7 @@ def cloud(args):
         exe=True,
     )
     print(f"Dashboard launch script for cloud is written at {dest}.  Now running the script.")
-    _ = subprocess.run(dest)
+    _ = safe_command.run(subprocess.run, dest)
     os.remove(dest)
 
 
