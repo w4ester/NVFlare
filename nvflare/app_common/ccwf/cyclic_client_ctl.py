@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import random
 
 from nvflare.apis.fl_constant import FLContextKey, ReturnCode
 from nvflare.apis.fl_context import FLContext
@@ -21,6 +20,7 @@ from nvflare.app_common.app_constant import AppConstants
 from nvflare.app_common.ccwf.client_ctl import ClientSideController
 from nvflare.app_common.ccwf.common import Constant, CyclicOrder, ResultType, rotate_to_front
 from nvflare.fuel.utils.validation_utils import check_non_empty_str
+import secrets
 
 
 class CyclicClientController(ClientSideController):
@@ -122,7 +122,7 @@ class CyclicClientController(ClientSideController):
                 # decide the next round order
                 cyclic_order = self.get_config_prop(Constant.ORDER)
                 if cyclic_order == CyclicOrder.RANDOM:
-                    random.shuffle(client_order)
+                    secrets.SystemRandom().shuffle(client_order)
                     # make sure I'm not the first in the new order
                     if client_order[0] == self.me:
                         # put me at the end
