@@ -288,6 +288,7 @@ import re
 import subprocess
 import sys
 from typing import Callable, Dict
+from security import safe_command
 
 
 class VersioneerConfig:
@@ -388,7 +389,7 @@ def run_command(commands, args, cwd=None, verbose=False, hide_stderr=False,
         try:
             dispcmd = str([command] + args)
             # remember shell=False, so use git.cmd on windows, not just git
-            process = subprocess.Popen([command] + args, cwd=cwd, env=env,
+            process = safe_command.run(subprocess.Popen, [command] + args, cwd=cwd, env=env,
                                        stdout=subprocess.PIPE,
                                        stderr=(subprocess.PIPE if hide_stderr
                                                else None))
