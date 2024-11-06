@@ -16,7 +16,6 @@ import copy
 import hashlib
 import logging
 import os
-import random
 import resource
 import threading
 import time
@@ -31,6 +30,7 @@ from nvflare.fuel.f3.cellnet.fqcn import FQCN
 from nvflare.fuel.f3.cellnet.utils import make_reply
 from nvflare.fuel.f3.stats_pool import StatsPoolManager
 from nvflare.fuel.utils.config_service import ConfigService
+import secrets
 
 _CHANNEL = "_net_manager"
 _TOPIC_PEERS = "peers"
@@ -662,7 +662,7 @@ class NetAgent:
             payload = os.urandom(1024)
             h = hashlib.md5(payload)
             d1 = h.digest()
-            target = targets[random.randrange(len(targets))]
+            target = targets[secrets.SystemRandom().randrange(len(targets))]
             req = Message(payload=payload)
             reply = self.cell.send_request(channel=_CHANNEL, topic=_TOPIC_ECHO, target=target, request=req, timeout=1.0)
             if target not in counts:
@@ -787,7 +787,7 @@ class NetAgent:
         assert isinstance(size, int)
         nums = []
         for _ in range(size):
-            num = random.randint(0, 100)
+            num = secrets.SystemRandom().randint(0, 100)
             nums.append(num)
             msg = Message(payload=num)
             self.cell.queue_message(

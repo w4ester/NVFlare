@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import gc
-import random
 
 from nvflare.apis.client import Client
 from nvflare.apis.controller_spec import ClientTask, Task
@@ -28,6 +27,7 @@ from nvflare.app_common.abstract.shareable_generator import ShareableGenerator
 from nvflare.app_common.app_constant import AppConstants
 from nvflare.app_common.app_event_type import AppEventType
 from nvflare.security.logging import secure_format_exception
+import secrets
 
 
 class RelayOrder:
@@ -139,9 +139,9 @@ class CyclicController(Controller):
         if len(targets) <= 1:
             self.system_panic("Not enough client sites.", fl_ctx)
         if self._order == RelayOrder.RANDOM:
-            random.shuffle(targets)
+            secrets.SystemRandom().shuffle(targets)
         elif self._order == RelayOrder.RANDOM_WITHOUT_SAME_IN_A_ROW:
-            random.shuffle(targets)
+            secrets.SystemRandom().shuffle(targets)
             if self._last_client == targets[0]:
                 targets = targets.append(targets.pop(0))
         self._last_client = targets[-1]

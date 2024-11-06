@@ -16,13 +16,13 @@ import argparse
 import glob
 import json
 import os
-import random
+import secrets
 
 SEED = 0
 
 
 def create_datasets(root, subdirs, extension, shuffle, seed):
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
 
     data_lists = []
     for subdir in subdirs:
@@ -34,7 +34,7 @@ def create_datasets(root, subdirs, extension, shuffle, seed):
         ), f"No images found using {search_string} for subdir '{subdir}' and extension '{extension}'!"
 
         if shuffle:
-            random.shuffle(data_list)
+            secrets.SystemRandom().shuffle(data_list)
 
         data_lists.append(data_list)
 

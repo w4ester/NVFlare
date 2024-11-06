@@ -14,7 +14,6 @@
 
 import copy
 import os
-import random
 import time
 
 import numpy as np
@@ -29,6 +28,7 @@ from nvflare.app_common.abstract.model import ModelLearnable
 from nvflare.app_common.app_constant import AppConstants
 from nvflare.app_common.np.constants import NPConstants
 from nvflare.security.logging import secure_format_exception
+import secrets
 
 
 class NPTrainer(Executor):
@@ -127,7 +127,7 @@ class NPTrainer(Executor):
             return make_reply(ReturnCode.TASK_ABORTED)
 
         # Prepare a DXO for our updated model. Create shareable and return
-        fake_metric = random.uniform(0.1, 1.0)
+        fake_metric = secrets.SystemRandom().uniform(0.1, 1.0)
         d = self._delta
         outgoing_np = {NPConstants.NUMPY_KEY: np.array([[d, d, d], [d, d, d], [d, d, d]], dtype=np.float32)}
         outgoing_dxo = DXO(
@@ -204,7 +204,7 @@ class NPTrainer(Executor):
     def _validate_model(self, shareable: Shareable, fl_ctx: FLContext, abort_signal: Signal) -> Shareable:
         dxo = from_shareable(shareable)
         self.log_info(fl_ctx, f"Validating model {dxo}")
-        fake_metric = random.uniform(0.1, 1.0)
+        fake_metric = secrets.SystemRandom().uniform(0.1, 1.0)
         val_results = {"val_accuracy": fake_metric}
         metric_dxo = DXO(data_kind=DataKind.METRICS, data=val_results)
         return metric_dxo.to_shareable()
