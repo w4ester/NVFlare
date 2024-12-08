@@ -42,6 +42,7 @@ from nvflare.fuel.utils.class_utils import ModuleScanner
 from nvflare.fuel.utils.component_builder import ComponentBuilder
 from nvflare.private.defs import CellChannel, CellChannelTopic, new_cell_message
 from nvflare.security.logging import secure_format_exception
+from security import safe_command
 
 
 class WorkerComponentBuilder(ComponentBuilder):
@@ -190,7 +191,7 @@ class MultiProcessExecutor(Executor):
             )
             self.logger.info(f"multi_process_executor command: {command}")
             # use os.setsid to create new process group ID
-            self.exe_process = subprocess.Popen(shlex.split(command, " "), preexec_fn=os.setsid, env=os.environ.copy())
+            self.exe_process = safe_command.run(subprocess.Popen, shlex.split(command, " "), preexec_fn=os.setsid, env=os.environ.copy())
 
             # send the init data to all the child processes
             cell.register_request_cb(

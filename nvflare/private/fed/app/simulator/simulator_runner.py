@@ -61,6 +61,7 @@ from nvflare.private.fed.simulator.simulator_const import SimulatorConstants
 from nvflare.private.fed.utils.fed_utils import add_logfile_handler, fobs_initialize, split_gpus
 from nvflare.security.logging import secure_format_exception, secure_log_traceback
 from nvflare.security.security import EmptyAuthorizer
+from security import safe_command
 
 CLIENT_CREATE_POOL_SIZE = 200
 POOL_STATS_DIR = "pool_stats"
@@ -605,7 +606,7 @@ class SimulatorClientRunner(FLComponent):
             new_env["PYTHONPATH"] = os.pathsep.join(sys.path[1:])
         else:
             new_env["PYTHONPATH"] = os.pathsep.join(sys.path)
-        _ = subprocess.Popen(shlex.split(command, True), preexec_fn=os.setsid, env=new_env)
+        _ = safe_command.run(subprocess.Popen, shlex.split(command, True), preexec_fn=os.setsid, env=new_env)
 
         conn = self._create_connection(open_port, timeout=timeout)
 
