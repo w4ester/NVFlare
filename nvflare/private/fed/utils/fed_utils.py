@@ -323,7 +323,7 @@ def get_return_code(process, job_id, workspace, logger):
     if os.path.exists(rc_file):
         try:
             with open(rc_file, "r") as f:
-                return_code = int(f.readline())
+                return_code = int(f.readline(5_000_000))
             os.remove(rc_file)
         except Exception:
             logger.warning(

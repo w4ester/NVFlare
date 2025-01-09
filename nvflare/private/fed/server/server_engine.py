@@ -134,7 +134,7 @@ class ServerEngine(ServerEngineInternalSpec):
             app_file = os.path.join(run_folder, "fl_app.txt")
             if os.path.exists(app_file):
                 with open(app_file, "r") as f:
-                    self.engine_info.app_names[job_id] = f.readline().strip()
+                    self.engine_info.app_names[job_id] = f.readline(5_000_000).strip()
             else:
                 self.engine_info.app_names[job_id] = "?"
 

@@ -107,7 +107,7 @@ class ClientEngine(ClientEngineInternalSpec):
             app_file = os.path.join(run_folder, "fl_app.txt")
             if os.path.exists(app_file):
                 with open(app_file, "r") as f:
-                    app_name = f.readline().strip()
+                    app_name = f.readline(5_000_000).strip()
             job = {
                 ClientStatusKey.APP_NAME: app_name,
                 ClientStatusKey.JOB_ID: job_id,
