@@ -32,6 +32,7 @@ from nvflare.private.fed.utils.fed_utils import get_return_code
 from nvflare.security.logging import secure_format_exception, secure_log_traceback
 
 from .client_status import ClientStatus, get_status_message
+from security import safe_command
 
 
 class ClientExecutor(ABC):
@@ -200,7 +201,7 @@ class ProcessExecutor(ClientExecutor):
             " --set" + command_options + " print_conf=True"
         )
         # use os.setsid to create new process group ID
-        process = subprocess.Popen(shlex.split(command, True), preexec_fn=os.setsid, env=new_env)
+        process = safe_command.run(subprocess.Popen, shlex.split(command, True), preexec_fn=os.setsid, env=new_env)
 
         self.logger.info("Worker child process ID: {}".format(process.pid))
 

@@ -69,6 +69,7 @@ from .run_info import RunInfo
 from .run_manager import RunManager
 from .server_engine_internal_spec import EngineInfo, ServerEngineInternalSpec
 from .server_status import ServerStatus
+from security import safe_command
 
 
 class ServerEngine(ServerEngineInternalSpec):
@@ -274,7 +275,7 @@ class ServerEngine(ServerEngineInternalSpec):
         )
         # use os.setsid to create new process group ID
 
-        process = subprocess.Popen(shlex.split(command, True), preexec_fn=os.setsid, env=new_env)
+        process = safe_command.run(subprocess.Popen, shlex.split(command, True), preexec_fn=os.setsid, env=new_env)
 
         if not job_id:
             job_id = ""
