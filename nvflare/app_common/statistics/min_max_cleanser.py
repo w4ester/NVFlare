@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 from typing import Tuple
 
 from nvflare.apis.fl_component import FLComponent
 from nvflare.app_common.app_constant import StatisticsConstants as StC
 from nvflare.app_common.statistics.statistics_privacy_cleanser import StatisticsPrivacyCleanser
+import secrets
 
 
 class AddNoiseToMinMax(FLComponent, StatisticsPrivacyCleanser):
@@ -63,7 +63,7 @@ class AddNoiseToMinMax(FLComponent, StatisticsPrivacyCleanser):
 
     @staticmethod
     def _get_min_value(local_min_value: float, noise_level: Tuple):
-        r = random.uniform(noise_level[0], noise_level[1])
+        r = secrets.SystemRandom().uniform(noise_level[0], noise_level[1])
         if local_min_value == 0:
             min_value = -(1 - r) * 1e-5
         else:
@@ -76,7 +76,7 @@ class AddNoiseToMinMax(FLComponent, StatisticsPrivacyCleanser):
 
     @staticmethod
     def _get_max_value(local_max_value: float, noise_level: Tuple):
-        r = random.uniform(noise_level[0], noise_level[1])
+        r = secrets.SystemRandom().uniform(noise_level[0], noise_level[1])
         if local_max_value == 0:
             max_value = (1 + r) * 1e-5
         else:

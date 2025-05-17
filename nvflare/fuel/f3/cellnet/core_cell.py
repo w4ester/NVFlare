@@ -15,7 +15,6 @@
 import copy
 import logging
 import os
-import random
 import threading
 import time
 import uuid
@@ -50,6 +49,7 @@ from nvflare.fuel.f3.message import Message
 from nvflare.fuel.f3.mpm import MainProcessMonitor
 from nvflare.fuel.f3.stats_pool import StatsPoolManager
 from nvflare.security.logging import secure_format_exception, secure_format_traceback
+import secrets
 
 _CHANNEL = "cellnet.channel"
 _TOPIC_BULK = "bulk"
@@ -349,7 +349,7 @@ class CoreCell(MessageReceiver, EndpointMonitor):
         else:
             if isinstance(root_url, list):
                 # multiple urls are available - randomly pick one
-                root_url = random.choice(root_url)
+                root_url = secrets.choice(root_url)
                 self.logger.info(f"{self.my_info.fqcn}: use Root URL {root_url}")
             if not _validate_url(root_url):
                 raise ValueError(f"{self.my_info.fqcn}: invalid Root URL '{root_url}'")
@@ -729,7 +729,7 @@ class CoreCell(MessageReceiver, EndpointMonitor):
                     return listener
             elif len(self.ext_listeners) > 0:
                 # no url specified - just pick one if any
-                k = random.choice(list(self.ext_listeners))
+                k = secrets.choice(list(self.ext_listeners))
                 return self.ext_listeners[k]
 
             listener = None

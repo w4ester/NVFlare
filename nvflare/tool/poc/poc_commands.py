@@ -14,7 +14,6 @@
 import json
 import os
 import pathlib
-import random
 import shutil
 import socket
 import subprocess
@@ -37,6 +36,7 @@ from nvflare.lighter.utils import load_yaml, update_project_server_name_config, 
 from nvflare.tool.api_utils import shutdown_system
 from nvflare.tool.poc.service_constants import FlareServiceConstants as SC
 from nvflare.utils.cli_utils import hocon_to_string
+import secrets
 
 DEFAULT_WORKSPACE = "/tmp/nvflare/poc"
 DEFAULT_PROJECT_NAME = "example_project"
@@ -557,7 +557,7 @@ def _sort_service_cmds(cmd_type, service_cmds: list, service_config) -> list:
             if len(service_cmds) == 1:
                 order_services.append((0, service_name, cmd_path))
             else:
-                order_services.append((random.randint(2, len(service_cmds)), service_name, cmd_path))
+                order_services.append((secrets.SystemRandom().randint(2, len(service_cmds)), service_name, cmd_path))
 
     order_services.sort(key=sort_first)
     if cmd_type == SC.CMD_STOP:

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import asyncio
-import random
 import threading
 import time
 from typing import Any, Dict, List
@@ -37,6 +36,7 @@ from .driver_params import DriverCap, DriverParams
 from .grpc.streamer_pb2 import Frame
 from .grpc.utils import get_grpc_client_credentials, get_grpc_server_credentials, use_aio_grpc
 from .net_utils import MAX_FRAME_SIZE, get_address, get_tcp_urls, ssl_required
+import secrets
 
 GRPC_DEFAULT_OPTIONS = [
     ("grpc.max_send_message_length", MAX_FRAME_SIZE),
@@ -76,7 +76,7 @@ class AioStreamSession(Connection):
                 self.disconn.start()
 
     def _disconnect(self):
-        t = random.randint(10, 60)
+        t = secrets.SystemRandom().randint(10, 60)
         self.logger.info(f"will close connection after {t} secs")
         time.sleep(t)
         self.logger.info(f"close connection now after {t} secs")

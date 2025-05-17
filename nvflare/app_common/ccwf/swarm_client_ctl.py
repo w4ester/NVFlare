@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import copy
-import random
 import threading
 import time
 
@@ -31,6 +30,7 @@ from nvflare.app_common.ccwf.client_ctl import ClientSideController
 from nvflare.app_common.ccwf.common import Constant, NumberMetricComparator, ResultType, make_task_name
 from nvflare.fuel.utils.validation_utils import check_non_empty_str, check_positive_int, check_positive_number
 from nvflare.security.logging import secure_format_traceback
+import secrets
 
 
 class _TrainerStatus:
@@ -372,7 +372,7 @@ class SwarmClientController(ClientSideController):
         aggr_clients = self.get_config_prop(Constant.AGGR_CLIENTS)
 
         # determine aggr client
-        aggr = random.choice(aggr_clients)
+        aggr = secrets.choice(aggr_clients)
 
         task_data.set_header(AppConstants.CURRENT_ROUND, for_round)
         task_data.add_cookie(AppConstants.CONTRIBUTION_ROUND, for_round)

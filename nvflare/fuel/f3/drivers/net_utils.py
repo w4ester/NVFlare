@@ -13,7 +13,6 @@
 # limitations under the License.
 import logging
 import os
-import random
 import socket
 import ssl
 from ssl import SSLContext
@@ -24,6 +23,7 @@ from nvflare.fuel.f3.comm_error import CommError
 from nvflare.fuel.f3.drivers.driver_params import DriverParams
 from nvflare.fuel.utils.argument_utils import str2bool
 from nvflare.security.logging import secure_format_exception
+import secrets
 
 log = logging.getLogger(__name__)
 
@@ -150,7 +150,7 @@ def get_open_tcp_port(resources: dict) -> Optional[int]:
                     return port
         else:
             for i in range(RANDOM_TRIES):
-                port = random.randint(port_range.start, port_range.stop - 1)
+                port = secrets.SystemRandom().randint(port_range.start, port_range.stop - 1)
                 if check_tcp_port(port):
                     return port
 

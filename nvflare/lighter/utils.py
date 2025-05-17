@@ -14,7 +14,6 @@
 
 import json
 import os
-import random
 import shutil
 from base64 import b64decode, b64encode
 
@@ -25,11 +24,12 @@ from cryptography.hazmat.primitives.asymmetric import padding
 
 from nvflare.lighter.impl.cert import load_crt
 from nvflare.lighter.tool_consts import NVFLARE_SIG_FILE, NVFLARE_SUBMITTER_CRT_FILE
+import secrets
 
 
 def generate_password(passlen=16):
     s = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    p = "".join(random.sample(s, passlen))
+    p = "".join(secrets.SystemRandom().sample(s, passlen))
     return p
 
 
