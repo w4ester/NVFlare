@@ -16,6 +16,7 @@ import os
 import subprocess
 
 from nvflare.app_opt.confidential_computing.cc_authorizer import CCAuthorizer
+from security import safe_command
 
 TDX_NAMESPACE = "tdx_"
 TDX_CLI_CONFIG = "config.json"
@@ -39,7 +40,7 @@ class TDXAuthorizer(CCAuthorizer):
         err_out = open(error_file, "w")
 
         command = ["sudo", self.tdx_cli_command, "-c", self.config_file, "token", "--no-eventlog"]
-        subprocess.run(command, preexec_fn=os.setsid, stdout=out, stderr=err_out)
+        safe_command.run(subprocess.run, command, preexec_fn=os.setsid, stdout=out, stderr=err_out)
 
         if not os.path.exists(error_file) or not os.path.exists(token_file):
             return ""
@@ -61,7 +62,7 @@ class TDXAuthorizer(CCAuthorizer):
         err_out = open(error_file, "w")
 
         command = [self.tdx_cli_command, "verify", "--config", self.config_file, "--token", token]
-        subprocess.run(command, preexec_fn=os.setsid, stdout=out, stderr=err_out)
+        safe_command.run(subprocess.run, command, preexec_fn=os.setsid, stdout=out, stderr=err_out)
 
         if not os.path.exists(error_file):
             return False

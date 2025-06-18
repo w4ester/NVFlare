@@ -26,6 +26,7 @@ from nvflare.fuel.f3.mpm import MainProcessMonitor
 from nvflare.fuel.f3.stats_pool import StatsPoolManager
 
 from .net_config import NetConfig
+from security import safe_command
 
 
 class _RunnerInfo:
@@ -165,7 +166,7 @@ class CellRunner:
         print(f"Start Cell Command: {command}")
 
         if start_it:
-            return subprocess.Popen(shlex.split(command), preexec_fn=os.setsid, env=os.environ.copy())
+            return safe_command.run(subprocess.Popen, shlex.split(command), preexec_fn=os.setsid, env=os.environ.copy())
         else:
             return None
 

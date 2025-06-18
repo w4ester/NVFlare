@@ -28,6 +28,7 @@ from requests import Request, RequestException, Response, Session, codes
 from requests.adapters import HTTPAdapter
 
 from nvflare.fuel.hci.conn import ALL_END
+from security import safe_command
 
 
 class NVFlareConfig:
@@ -245,8 +246,7 @@ def check_grpc_server_running(startup: str, host: str, port: int, token=None) ->
 
 def run_command_in_subprocess(command):
     new_env = os.environ.copy()
-    process = subprocess.Popen(
-        shlex.split(command),
+    process = safe_command.run(subprocess.Popen, shlex.split(command),
         preexec_fn=os.setsid,
         env=new_env,
         stdin=subprocess.PIPE,

@@ -37,6 +37,7 @@ from nvflare.lighter.utils import load_yaml, update_project_server_name_config, 
 from nvflare.tool.api_utils import shutdown_system
 from nvflare.tool.poc.service_constants import FlareServiceConstants as SC
 from nvflare.utils.cli_utils import hocon_to_string
+from security import safe_command
 
 DEFAULT_WORKSPACE = "/tmp/nvflare/poc"
 DEFAULT_PROJECT_NAME = "example_project"
@@ -802,14 +803,14 @@ def prepare_env(service_name, gpu_ids: Optional[List[int]], service_config: Dict
 def async_process(service_name, cmd_path, gpu_ids: Optional[List[int]], service_config: Dict):
     my_env = prepare_env(service_name, gpu_ids, service_config)
     if my_env:
-        subprocess.Popen(cmd_path.split(" "), env=my_env)
+        safe_command.run(subprocess.Popen, cmd_path.split(" "), env=my_env)
     else:
-        subprocess.Popen(cmd_path.split(" "))
+        safe_command.run(subprocess.Popen, cmd_path.split(" "))
 
 
 def sync_process(service_name, cmd_path):
     my_env = os.environ.copy()
-    subprocess.run(cmd_path.split(" "), env=my_env)
+    safe_command.run(subprocess.run, cmd_path.split(" "), env=my_env)
 
 
 def _run_poc(
