@@ -50,7 +50,7 @@ class TDXAuthorizer(CCAuthorizer):
                     return ""
                 else:
                     with open(token_file, "r") as t_f:
-                        token = t_f.readline()
+                        token = t_f.readline(5_000_000)
                     return token
         except:
             return ""

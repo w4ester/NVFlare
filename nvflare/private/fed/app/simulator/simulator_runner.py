@@ -364,7 +364,7 @@ class SimulatorRunner(FLComponent):
             if os.path.exists(rc_file):
                 try:
                     with open(rc_file, "r") as f:
-                        return_code = int(f.readline())
+                        return_code = int(f.readline(5_000_000))
                     os.remove(rc_file)
                     self.logger.info(f"return_code from process_rc_file: {return_code}")
                 except Exception:
