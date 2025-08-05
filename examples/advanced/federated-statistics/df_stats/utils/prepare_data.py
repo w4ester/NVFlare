@@ -65,7 +65,7 @@ def prepare_data(data_root_dir: str):
 
         with open(dest, "w") as f:
             writer = csv.writer(f)
-            r = requests.get(url, allow_redirects=True)
+            r = requests.get(url, allow_redirects=True, timeout=60)
             for line in r.iter_lines():
                 writer.writerow(line.decode("utf-8").split(","))
     print("\ndone with prepare data")
